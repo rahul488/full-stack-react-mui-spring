@@ -1,24 +1,51 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import "./app.css";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { Box } from "@mui/material";
+import { Routes, Route } from "react-router-dom";
+import { ProductDetails, CustomDrawer } from "./components/index";
+import { Cart, Home, Categories, Login, WishList } from "./Pages/index";
 
 function App() {
+  const [mode, setMode] = useState("light");
+
+ const theme = createTheme({
+    palette: {
+      mode: mode,
+    },
+    breakpoints: {
+      values: {
+        xs: 0,
+        sm: 600,
+        md: 900,
+        lg: 1200,
+        xl: 1536,
+      },
+    },
+  });
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route
+          path="/home"
+          element={
+            <ThemeProvider theme={theme}>
+              <Box bgcolor={"background.default"} color={"text.primary"}>
+                <CustomDrawer mode={mode} setMode={setMode}/>
+              </Box>
+            </ThemeProvider>
+          }
         >
-          Learn React
-        </a>
-      </header>
-    </div>
+          <Route path="" element={<Home />} />
+          <Route path="all-categories" element={<Categories />} />
+          <Route path="/home/details/:id" element={<ProductDetails />} />
+          <Route path="carts" element={<Cart />} />
+          <Route path="wishlist" element={<WishList />} />
+        </Route>
+      </Routes>
+    </>
   );
 }
 
